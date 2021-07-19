@@ -27,7 +27,7 @@ class Utils {
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.show(0, 'Office',
-        'Good morning! Time for office.', platformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Time\'s Up!', 'Your timer has run out!', platformChannelSpecifics);
   }
 }
