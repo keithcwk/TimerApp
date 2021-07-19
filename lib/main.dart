@@ -8,7 +8,23 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var initializationSettingsAndroid = AndroidInitializationSettings(defaultIcon)
+  var initializationSettingsAndroid =
+      AndroidInitializationSettings('outline_timer_black_24dp');
+
+  var initializationSettingsIOS = IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      onDidReceiveLocalNotification:
+          (int id, String title, String body, String payload) async {});
+  var initializationSetttings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  await flutterLocalNotificationsPlugin.initialize(initializationSetttings,
+      onSelectNotification: (String payload) async {
+    if (payload != null) {
+      debugPrint('Notification Payload: ' + payload);
+    }
+  });
   runApp(MyApp());
   await AndroidAlarmManager.initialize();
 }

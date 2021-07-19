@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:timer_app/button_widget.dart';
 import 'package:timer_app/shared/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timer_app/shared/utils.dart';
 
 class TimerPage extends StatefulWidget {
   @override
@@ -144,7 +145,8 @@ class _TimerPageState extends State<TimerPage> {
 
       // Execute background timer
       AndroidAlarmManager.oneShot(
-          Duration(seconds: seconds.toInt()), _alarmId, alarmCallback);
+          Duration(seconds: seconds.toInt()), _alarmId, alarmCallback,
+          exact: true, wakeup: true);
     });
   }
 
@@ -153,6 +155,11 @@ class _TimerPageState extends State<TimerPage> {
     // If reset = true
     if (reset) {
       resetTimer();
+    }
+
+    // toggles notif if and only time is out
+    if (seconds == 0) {
+      Utils.scheduleAlarm();
     }
 
     setState(() {
