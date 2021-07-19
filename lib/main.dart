@@ -1,5 +1,6 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:timer_app/Home.dart';
 import 'package:timer_app/TimerPage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -7,6 +8,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 void main() async {
+  // Notification Initialization
   WidgetsFlutterBinding.ensureInitialized();
   var initializationSettingsAndroid =
       AndroidInitializationSettings('outline_timer_black_24dp');
@@ -26,6 +28,8 @@ void main() async {
     }
   });
   runApp(MyApp());
+
+  // Alarm Manager Initialization
   await AndroidAlarmManager.initialize();
 }
 

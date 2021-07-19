@@ -33,6 +33,7 @@ dependencies:
   blinking_text: ^1.0.1
   flutter_local_notifications: ^4.0.1+2
   flutter_native_timezone: ^1.0.4
+  numeric_keyboard: ^1.1.0
 
 dev_dependencies:
   flutter_test:

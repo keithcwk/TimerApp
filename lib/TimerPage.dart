@@ -46,7 +46,9 @@ class _TimerPageState extends State<TimerPage> {
     final isRunning = timer == null ? false : timer.isActive;
     final isCompleted = seconds == maxSeconds || seconds == 0;
 
-    return isRunning || !isCompleted
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 300),
+      child: isRunning || !isCompleted
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -77,7 +79,7 @@ class _TimerPageState extends State<TimerPage> {
               startTimer();
             },
             buttonColor: themeBlackLight,
-            labelColor: Colors.white);
+            labelColor: Colors.white),);
   }
 
   Widget buildTime() {

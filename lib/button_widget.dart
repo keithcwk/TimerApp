@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:timer_app/shared/constants.dart';
 
 class ButtonWidget extends StatelessWidget {
   final VoidCallback onClicked;
