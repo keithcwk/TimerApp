@@ -1,10 +1,16 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:timer_app/TimerPage.dart';
-import 'package:timer_app/Home.dart';
-import 'package:timer_app/TimerAnimated.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var initializationSettingsAndroid = AndroidInitializationSettings(defaultIcon)
   runApp(MyApp());
+  await AndroidAlarmManager.initialize();
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TimerAnimated(),
+      home: TimerPage(),
       debugShowCheckedModeBanner: false,
     );
   }

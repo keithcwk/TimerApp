@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:blinking_text/blinking_text.dart';
 import 'package:flutter/material.dart';
-import 'package:timer_app/playPause_button.dart';
+import 'package:flutter/rendering.dart';
+import 'package:timer_app/button_widget.dart';
 import 'package:timer_app/shared/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,66 +13,12 @@ class TimerPage extends StatefulWidget {
   _TimerPageState createState() => _TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage>
-    with SingleTickerProviderStateMixin {
-  static const maxSeconds = 10;
+class _TimerPageState extends State<TimerPage> {
+  static const maxSeconds = 5;
   int seconds = maxSeconds;
+  bool isButtonClickable = true;
   Timer timer;
-  bool isPaused = false;
-  AnimationController _controller;
-  Animation _timerAnimation;
-
-  // to start timer
-  void startTimer({bool reset = true}) {
-    // time == 0 and play is pressed
-    if (reset) {
-      _controller.reset();
-      _controller.forward();
-      resetTimer();
-    }
-
-    timer = Timer.periodic(Duration(seconds: 1), (_) {
-      // decrement if seconds > 0
-      if (seconds > 0) {
-        setState(() => seconds--);
-      }
-      // time == 0, does not reset automatically
-      else
-        stopTimer(reset: false);
-    });
-  }
-
-  // to pause or reset the timer
-  void stopTimer({bool reset = true}) {
-    // reset condition
-    // toggled when stop is pressed
-    if (reset) {
-      resetTimer();
-    }
-    setState(() => timer.cancel());
-  }
-
-  // reset the timer to original value
-  void resetTimer() {
-    setState(() {
-      seconds = maxSeconds;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-        duration: Duration(seconds: maxSeconds + 1), vsync: this);
-
-    _timerAnimation = Tween(begin: 1.0, end: 0.0).animate(_controller);
-    _controller.addListener(() {
-      // print(_controller.value);
-      print(_timerAnimation.value);
-    });
-
-    _controller.addStatusListener((status) {});
-  }
+  int _alarmId = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -88,51 +37,69 @@ class _TimerPageState extends State<TimerPage>
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 10),
-            timerClock(),
-            SizedBox(height: 60),
-            controlsButton()
-          ],
+          children: [timerClock(), SizedBox(height: 60), buildButtons()],
         )));
   }
 
-  // Building the 'start' button widget
-  Widget controlsButton() {
+  Widget buildButtons() {
     final isRunning = timer == null ? false : timer.isActive;
-    // isCompleted when timer is not started, or timer runs out
     final isCompleted = seconds == maxSeconds || seconds == 0;
 
-    // displaying button accordingly
-    // !isCompleted used so stop is shown as long as timer has been started
-    // if !isCompleted is not used, stop is only shown when played
     return isRunning || !isCompleted
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PlayPauseButton(
-                runState: isRunning,
-                onClicked: () {
-                  if (isRunning) {
-                    _controller.stop();
-                    print('Paused');
-                    stopTimer(reset: false);
-                  } else {
-                    _controller.forward();
-                    print('Resumed');
-                    startTimer(reset: false);
-                  }
-                },
-              ),
-              stopButton()
+              ButtonWidget(
+                  text: isRunning ? 'Pause' : 'Resume',
+                  onClicked: () {
+                    if (isRunning) {
+                      clickDelay();
+                      stopTimer(reset: false);
+                    } else {
+                      clickDelay();
+                      startTimer(reset: false);
+                    }
+                  },
+                  buttonColor: themeBlackLight,
+                  labelColor: Colors.white),
+              SizedBox(width: 20),
+              ButtonWidget(
+                  text: 'Reset',
+                  onClicked: stopTimer,
+                  buttonColor: themeBlackLight,
+                  labelColor: Colors.white),
             ],
           )
-        : PlayPauseButton(
-            runState: isRunning,
+        : ButtonWidget(
+            text: 'Start',
             onClicked: () {
-              _controller.forward();
               startTimer();
-            });
+            },
+            buttonColor: themeBlackLight,
+            labelColor: Colors.white);
+  }
+
+  Widget buildTime() {
+    if (seconds <= 0) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BlinkText('Time\'s Up!',
+                style:
+                    GoogleFonts.montserrat(color: Colors.white, fontSize: 20),
+                duration: Duration(milliseconds: 700)),
+            BlinkText('${seconds.toStringAsFixed(0)}',
+                style:
+                    GoogleFonts.montserrat(color: Colors.white, fontSize: 70),
+                duration: Duration(milliseconds: 700))
+          ],
+        ),
+      );
+    }
+    return Text('${seconds.toStringAsFixed(0)}',
+        style: GoogleFonts.montserrat(
+            color: Colors.white, fontSize: 70, fontWeight: FontWeight.w500));
   }
 
   Widget timerClock() {
@@ -142,45 +109,81 @@ class _TimerPageState extends State<TimerPage>
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Center(child: timeDisplay()),
-          AnimatedBuilder(
-              animation: _controller,
-              builder: (BuildContext context, _) {
-                return CircularProgressIndicator(
-                  value: _timerAnimation.value,
-                  valueColor: AlwaysStoppedAnimation(themeBlueLight),
-                  backgroundColor: themeBlackLight,
-                  strokeWidth: 8,
-                );
-              }),
+          Center(child: buildTime()),
+          CircularProgressIndicator(
+            value: seconds / maxSeconds,
+            valueColor: AlwaysStoppedAnimation(themeBlueLight),
+            backgroundColor: themeBlackLight,
+            strokeWidth: 8,
+          )
         ],
       ),
     );
   }
 
-  // Numerical display of the timer
-  Widget timeDisplay() {
-    return Text('$seconds',
-        style: GoogleFonts.montserrat(
-            color: Colors.white, fontSize: 80, fontWeight: FontWeight.w500));
+// ----------------------------------------------------------------------------
+  // Function to start timer
+  void startTimer({bool reset = true}) {
+    // If start is pressed when seconds = 0
+    if (reset) {
+      resetTimer();
+    }
+
+    timer = Timer.periodic(Duration(seconds: 1), (_) {
+      // Decrement seconds after every second
+      if (seconds > 0) {
+        setState(() {
+          seconds--;
+        });
+      }
+
+      // Stops the timer but does not reset
+      else {
+        stopTimer(reset: false);
+      }
+
+      // Execute background timer
+      AndroidAlarmManager.oneShot(
+          Duration(seconds: seconds.toInt()), _alarmId, alarmCallback);
+    });
   }
 
-  // stop button
-  Widget stopButton() {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-            primary: themeBlackLight,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        child: Container(
-            // color: Colors.white,
-            height: 35,
-            width: 35,
-            child:
-                Center(child: Icon(Icons.stop, color: Colors.white, size: 35))),
-        onPressed: (() {
-          _controller.reset();
-          stopTimer();
-        }));
+  // Stop timer function
+  void stopTimer({bool reset = true}) {
+    // If reset = true
+    if (reset) {
+      resetTimer();
+    }
+
+    setState(() {
+      timer.cancel();
+      AndroidAlarmManager.cancel(_alarmId);
+    });
+  }
+
+  // Reset timer
+  void resetTimer() {
+    setState(() {
+      seconds = maxSeconds;
+    });
+  }
+
+  // callback function for alarm manager
+  void alarmCallback() {
+    debugPrint("Alarm started at ${DateTime.now()}");
+  }
+
+  // Prevent spam pause/resume inputs
+  void clickDelay() async {
+    Duration time = Duration(milliseconds: 10);
+    setState(() {
+      isButtonClickable = false;
+
+      Future.delayed(time, () {
+        setState(() {
+          isButtonClickable = true;
+        });
+      });
+    });
   }
 }

@@ -14,6 +14,7 @@ class _TimerAnimatedState extends State<TimerAnimated>
     with SingleTickerProviderStateMixin {
   static const maxSeconds = 20.0;
   double seconds = maxSeconds;
+  bool isButtonClickable = true;
   Timer timer;
   Animation _timerAnimation;
   AnimationController _controller;
@@ -37,17 +38,6 @@ class _TimerAnimatedState extends State<TimerAnimated>
 
     // change to seconds : 1
     timer = Timer.periodic(Duration(seconds: 1), (_) {
-      // Allows timer to stop at 0
-      // if (seconds > 0) {
-      //   setState(() {
-      //     seconds--;
-      //     _controller.forward();
-      //   });
-      // }
-      // else {
-      //   stopTimer(reset: false);
-      // }
-
       // Allows timer to run less than 0
       setState(() {
         seconds--;
@@ -71,6 +61,19 @@ class _TimerAnimatedState extends State<TimerAnimated>
     setState(() {
       seconds = maxSeconds;
       _controller.reset();
+    });
+  }
+
+  void clickDelay() async {
+    Duration time = Duration(milliseconds: 10);
+    setState(() {
+      isButtonClickable = false;
+
+      Future.delayed(time, () {
+        setState(() {
+          isButtonClickable = true;
+        });
+      });
     });
   }
 
@@ -175,20 +178,5 @@ class _TimerAnimatedState extends State<TimerAnimated>
         ],
       ),
     );
-  }
-
-  bool isButtonClickable = true;
-
-  void clickDelay() async {
-    Duration time = Duration(milliseconds: 10);
-    setState(() {
-      isButtonClickable = false;
-
-      Future.delayed(time, () {
-        setState(() {
-          isButtonClickable = true;
-        });
-      });
-    });
   }
 }
