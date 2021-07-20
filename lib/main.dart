@@ -1,7 +1,7 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:timer_app/Home.dart';
-import 'package:timer_app/TimerPage.dart';
+import 'package:get/get.dart';
+import 'package:timer_app/home.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -37,13 +37,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TimerPage(),
+      home: Home(),
       debugShowCheckedModeBanner: false,
     );
   }

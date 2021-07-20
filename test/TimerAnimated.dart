@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:timer_app/button_widget.dart';
+import 'package:timer_app/shared/button_widget.dart';
 import 'package:timer_app/shared/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 

@@ -4,22 +4,59 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:timer_app/button_widget.dart';
+import 'package:timer_app/shared/button_widget.dart';
 import 'package:timer_app/shared/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timer_app/shared/utils.dart';
 
 class TimerPage extends StatefulWidget {
+  final List<String> timeFormatted;
+  TimerPage({this.timeFormatted});
   @override
   _TimerPageState createState() => _TimerPageState();
 }
 
 class _TimerPageState extends State<TimerPage> {
-  static const maxSeconds = 5;
-  int seconds = maxSeconds;
+  // Used for decrementing
+  int maxSeconds;
+  int seconds;
+
+  // Used for display
+  String displaySecs;
+  String displayMins;
+  String displayHrs;
+
+  // Used for spam handling
   bool isButtonClickable = true;
   Timer timer;
   int _alarmId = 1;
+
+
+  void initState() {
+    super.initState();
+    // Used in decrementing
+    maxSeconds = Utils.convertToSec(widget.timeFormatted);
+    seconds = Utils.convertToSec(widget.timeFormatted);
+
+    // Calls convertToHMS to show hh:mm:ss
+    displaySecs = Utils.convertToHMS(seconds)[2];
+    displayMins = Utils.convertToHMS(seconds)[1];
+    displayHrs = Utils.convertToHMS(seconds)[0];
+    startTimer();
+  }
+
+  void dispose() {
+    super.dispose();
+    maxSeconds = 0;
+    seconds = 0;
+    displaySecs = "";
+    displayMins = "";
+    displayHrs = "";
+
+    // Dispose the alarm & timer
+    AndroidAlarmManager.cancel(_alarmId);
+    timer.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,41 +86,42 @@ class _TimerPageState extends State<TimerPage> {
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 300),
       child: isRunning || !isCompleted
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ButtonWidget(
-                  text: isRunning ? 'Pause' : 'Resume',
-                  onClicked: () {
-                    if (isRunning) {
-                      clickDelay();
-                      stopTimer(reset: false);
-                    } else {
-                      clickDelay();
-                      startTimer(reset: false);
-                    }
-                  },
-                  buttonColor: themeBlackLight,
-                  labelColor: Colors.white),
-              SizedBox(width: 20),
-              ButtonWidget(
-                  text: 'Reset',
-                  onClicked: stopTimer,
-                  buttonColor: themeBlackLight,
-                  labelColor: Colors.white),
-            ],
-          )
-        : ButtonWidget(
-            text: 'Start',
-            onClicked: () {
-              startTimer();
-            },
-            buttonColor: themeBlackLight,
-            labelColor: Colors.white),);
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ButtonWidget(
+                    text: isRunning ? 'Pause' : 'Resume',
+                    onClicked: () {
+                      if (isRunning) {
+                        clickDelay();
+                        stopTimer(reset: false);
+                      } else {
+                        clickDelay();
+                        startTimer(reset: false);
+                      }
+                    },
+                    buttonColor: themeBlackLight,
+                    labelColor: Colors.white),
+                SizedBox(width: 20),
+                ButtonWidget(
+                    text: 'Reset',
+                    onClicked: stopTimer,
+                    buttonColor: themeBlackLight,
+                    labelColor: Colors.white),
+              ],
+            )
+          : ButtonWidget(
+              text: 'Start',
+              onClicked: () {
+                startTimer();
+              },
+              buttonColor: themeBlackLight,
+              labelColor: Colors.white),
+    );
   }
 
   Widget buildTime() {
-    if (seconds <= 0) {
+    if (seconds == 0) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -92,17 +130,28 @@ class _TimerPageState extends State<TimerPage> {
                 style:
                     GoogleFonts.montserrat(color: Colors.white, fontSize: 20),
                 duration: Duration(milliseconds: 700)),
-            BlinkText('${seconds.toStringAsFixed(0)}',
+            BlinkText('${seconds.toString()}',
                 style:
                     GoogleFonts.montserrat(color: Colors.white, fontSize: 70),
                 duration: Duration(milliseconds: 700))
           ],
         ),
       );
+    } else if (seconds > 3600 && seconds < 86400) {
+      return Center(
+        child: Text('$displayHrs:$displayMins:$displaySecs',
+            style: GoogleFonts.montserrat(color: Colors.white, fontSize: 30)),
+      );
+    } else if (seconds >= 60 && seconds < 3600) {
+      return Center(
+        child: Text('$displayMins:$displaySecs',
+            style: GoogleFonts.montserrat(color: Colors.white, fontSize: 50)),
+      );
     }
-    return Text('${seconds.toStringAsFixed(0)}',
-        style: GoogleFonts.montserrat(
-            color: Colors.white, fontSize: 70, fontWeight: FontWeight.w500));
+    return Center(
+      child: Text('$displaySecs',
+          style: GoogleFonts.montserrat(color: Colors.white, fontSize: 70)),
+    );
   }
 
   Widget timerClock() {
@@ -137,6 +186,9 @@ class _TimerPageState extends State<TimerPage> {
       if (seconds > 0) {
         setState(() {
           seconds--;
+          displaySecs = Utils.convertToHMS(seconds)[2];
+          displayMins = Utils.convertToHMS(seconds)[1];
+          displayHrs = Utils.convertToHMS(seconds)[0];
         });
       }
 
@@ -174,6 +226,9 @@ class _TimerPageState extends State<TimerPage> {
   void resetTimer() {
     setState(() {
       seconds = maxSeconds;
+      displaySecs = Utils.convertToHMS(seconds)[2];
+      displayMins = Utils.convertToHMS(seconds)[1];
+      displayHrs = Utils.convertToHMS(seconds)[0];
     });
   }
 

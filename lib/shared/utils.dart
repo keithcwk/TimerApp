@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as localNoti;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:timer_app/home.dart';
+import 'package:timer_app/timerPage.dart';
 import '../main.dart';
 
 class Utils {
@@ -42,7 +46,7 @@ class Utils {
     var seconds = "";
 
     if (length >= 5) {
-      if (length >= 6 && timeTemp[0] != 0) {
+      if (length >= 6 && timeTemp[0] != "00") {
         seconds = timeTemp[4] + timeTemp[5];
         minute = timeTemp[2] + timeTemp[3];
         hour += timeTemp[0] + timeTemp[1];
@@ -73,9 +77,59 @@ class Utils {
       }
     }
 
-    formatted.add(hour);
-    formatted.add(minute);
-    formatted.add(seconds);
+    formatted.addAll([hour, minute, seconds]);
     return formatted;
   }
+
+  static int convertToSec(List<String> formattedTime) {
+    int totalTime = 0;
+
+    totalTime = int.parse(formattedTime[2]) +
+        int.parse(formattedTime[1]) * 60 +
+        int.parse(formattedTime[0]) * 360;
+    return totalTime;
+  }
+
+  static List<String> convertToHMS(int seconds) {
+    List<String> display = [];
+    String hour;
+    String mins;
+    String secs;
+
+    hour = (seconds / 3600).truncate().toString();
+    mins = (seconds.remainder(3600) / 60).truncate().toString();
+    secs = (seconds.remainder(3600).remainder(60)).truncate().toString();
+    display.addAll([hour, mins, secs]);
+    return display;
+  }
+
+  // static void addTimerPages(TimerPage page) {
+  //   Home.timerPages.add(page);
+  //   print(Home.timerPages);
+  // }
+
+  // Displays the toast message
+  static void showToast(String message, FToast fToast) {
+    Widget toast = Container(
+      height: 60,
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.grey.shade200,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(message),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
 }
