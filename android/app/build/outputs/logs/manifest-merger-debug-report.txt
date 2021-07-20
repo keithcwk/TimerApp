@@ -5,6 +5,7 @@ INJECTED from D:\Uni\TimerApp\timer_app\android\app\src\main\AndroidManifest.xml
 INJECTED from D:\Uni\TimerApp\timer_app\android\app\src\main\AndroidManifest.xml:1:1-60:12
 INJECTED from D:\Uni\TimerApp\timer_app\android\app\src\main\AndroidManifest.xml:1:1-60:12
 MERGED from D:\Uni\TimerApp\timer_app\android\app\src\main\AndroidManifest.xml:1:1-60:12
+MERGED from [:fluttertoast] D:\Uni\TimerApp\timer_app\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:android_alarm_manager] D:\Uni\TimerApp\timer_app\build\android_alarm_manager\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_local_notifications] D:\Uni\TimerApp\timer_app\build\flutter_local_notifications\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-23:12
 MERGED from [:path_provider] D:\Uni\TimerApp\timer_app\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
@@ -154,6 +155,8 @@ uses-sdk
 INJECTED from D:\Uni\TimerApp\timer_app\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Uni\TimerApp\timer_app\android\app\src\main\AndroidManifest.xml
 INJECTED from D:\Uni\TimerApp\timer_app\android\app\src\main\AndroidManifest.xml
+MERGED from [:fluttertoast] D:\Uni\TimerApp\timer_app\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:fluttertoast] D:\Uni\TimerApp\timer_app\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:android_alarm_manager] D:\Uni\TimerApp\timer_app\build\android_alarm_manager\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:android_alarm_manager] D:\Uni\TimerApp\timer_app\build\android_alarm_manager\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_local_notifications] D:\Uni\TimerApp\timer_app\build\flutter_local_notifications\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44

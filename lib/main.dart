@@ -1,8 +1,8 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:timer_app/home.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timer_app/timerInput.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Home(),
+      home: TimerInput(),
       debugShowCheckedModeBanner: false,
     );
   }

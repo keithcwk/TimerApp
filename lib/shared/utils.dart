@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as localNoti;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:timer_app/home.dart';
 import 'package:timer_app/timerPage.dart';
 import '../main.dart';
 
 class Utils {
+  // Schedules a notification when the timer runs out
   static void scheduleAlarm() async {
     var androidPlatformChannelSpecifics = localNoti.AndroidNotificationDetails(
       'alarm_notif',
@@ -35,6 +35,8 @@ class Utils {
         0, 'Time\'s Up!', 'Your timer has run out!', platformChannelSpecifics);
   }
 
+  // Formats a string of time into [HH:MM:SS]
+  // Used in TimerInput
   static List<String> stringFormatter(String time) {
     List<String> timeTemp = time.split("");
     var length = timeTemp.length;
@@ -45,7 +47,9 @@ class Utils {
     var minute = "";
     var seconds = "";
 
+    // HH:MM:SS
     if (length >= 5) {
+      // Prevents overflow and empty input
       if (length >= 6 && timeTemp[0] != "00") {
         seconds = timeTemp[4] + timeTemp[5];
         minute = timeTemp[2] + timeTemp[3];
@@ -55,7 +59,10 @@ class Utils {
         minute = timeTemp[1] + timeTemp[2];
         hour += "0" + timeTemp[0];
       }
-    } else if (length >= 3) {
+    }
+
+    // 00:MM:SS
+    else if (length >= 3) {
       if (length == 4) {
         seconds = timeTemp[2] + timeTemp[3];
         minute = timeTemp[0] + timeTemp[1];
@@ -65,7 +72,10 @@ class Utils {
         minute = "0" + timeTemp[0];
         hour += "00";
       }
-    } else if (length >= 1) {
+    }
+
+    // 00:00:SS
+    else if (length >= 1) {
       if (length == 2) {
         seconds = timeTemp[0] + timeTemp[1];
         minute += "00";
@@ -81,6 +91,9 @@ class Utils {
     return formatted;
   }
 
+  // Convert list of ["HH", "MM", "SS"] into seconds
+  // Used in TimerInput to check whether time > 0
+  // Used in TimerPage
   static int convertToSec(List<String> formattedTime) {
     int totalTime = 0;
 
@@ -90,6 +103,8 @@ class Utils {
     return totalTime;
   }
 
+  // Convert seconds into HH:MM:SS format
+  // Used to display time in TimerPage
   static List<String> convertToHMS(int seconds) {
     List<String> display = [];
     String hour;
@@ -102,11 +117,6 @@ class Utils {
     display.addAll([hour, mins, secs]);
     return display;
   }
-
-  // static void addTimerPages(TimerPage page) {
-  //   Home.timerPages.add(page);
-  //   print(Home.timerPages);
-  // }
 
   // Displays the toast message
   static void showToast(String message, FToast fToast) {
@@ -131,5 +141,4 @@ class Utils {
       toastDuration: Duration(seconds: 2),
     );
   }
-
 }

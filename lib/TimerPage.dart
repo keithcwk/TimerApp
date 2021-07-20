@@ -31,7 +31,6 @@ class _TimerPageState extends State<TimerPage> {
   Timer timer;
   int _alarmId = 1;
 
-
   void initState() {
     super.initState();
     // Used in decrementing
@@ -79,6 +78,7 @@ class _TimerPageState extends State<TimerPage> {
         )));
   }
 
+  // Builds the Start/Pause/Resume/Reset button
   Widget buildButtons() {
     final isRunning = timer == null ? false : timer.isActive;
     final isCompleted = seconds == maxSeconds || seconds == 0;
@@ -120,7 +120,9 @@ class _TimerPageState extends State<TimerPage> {
     );
   }
 
+  // Builds the timer display
   Widget buildTime() {
+    // When time runs out
     if (seconds == 0) {
       return Center(
         child: Column(
@@ -137,23 +139,32 @@ class _TimerPageState extends State<TimerPage> {
           ],
         ),
       );
-    } else if (seconds > 3600 && seconds < 86400) {
+    }
+
+    // Display HH:MM:SS
+    else if (seconds > 3600 && seconds < 86400) {
       return Center(
         child: Text('$displayHrs:$displayMins:$displaySecs',
             style: GoogleFonts.montserrat(color: Colors.white, fontSize: 30)),
       );
-    } else if (seconds >= 60 && seconds < 3600) {
+    }
+
+    // Display MM:SS
+    else if (seconds >= 60 && seconds < 3600) {
       return Center(
         child: Text('$displayMins:$displaySecs',
             style: GoogleFonts.montserrat(color: Colors.white, fontSize: 50)),
       );
     }
+
+    // Display SS
     return Center(
       child: Text('$displaySecs',
           style: GoogleFonts.montserrat(color: Colors.white, fontSize: 70)),
     );
   }
 
+  // Builds the circular progress indicator around the timer
   Widget timerClock() {
     return SizedBox(
       height: 200,

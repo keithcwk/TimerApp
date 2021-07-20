@@ -57,86 +57,97 @@ class _TimerInputState extends State<TimerInput>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 30),
-        // Enter timer value
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(display != "" ? '${timeFormatted[0]}' : "00",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.montserrat(
-                    fontSize: 60,
-                    fontWeight: FontWeight.w400,
-                    color: themeGrey)),
-            Text('h',
-                style: GoogleFonts.montserrat(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: themeGrey)),
-            SizedBox(width: 20),
-            Text(display != "" ? '${timeFormatted[1]}' : "00",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.montserrat(
-                    fontSize: 60,
-                    fontWeight: FontWeight.w400,
-                    color: themeGrey)),
-            Text('m',
-                style: GoogleFonts.montserrat(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: themeGrey)),
-            SizedBox(width: 20),
-            Text(display != "" ? '${timeFormatted[2]}' : "00",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.montserrat(
-                    fontSize: 60,
-                    fontWeight: FontWeight.w400,
-                    color: themeGrey)),
-            Text('s',
-                style: GoogleFonts.montserrat(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: themeGrey)),
-          ],
-        ),
-        SizedBox(height: 30),
-        // Divider line
-        Divider(
-            height: 10,
-            thickness: 0.75,
-            color: Colors.white.withOpacity(0.3),
-            indent: 30,
-            endIndent: 30),
-        // Keyboard numbers
-        KeyboardNumbers(
-          onKeyboardTap: _onKeyboardTap,
-          textColor: themeGrey,
-          leftIcon: Icon(Icons.backspace, color: themeGrey),
-          leftButtonFn: _leftButton,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        ),
-        // Start button
-        AnimatedOpacity(
-            opacity: display != "" ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 300),
-            child: ButtonWidget(
-                text: 'Start',
-                onClicked: () {
-                  print('Total seconds: ${Utils.convertToSec(timeFormatted)}');
-                  if (Utils.convertToSec(timeFormatted) > 0) {
-                    // Utils.addTimerPages(
-                    //     TimerPage(timeFormatted: timeFormatted));
-                    // Get.to(() => Home());
-                    Get.to(() => TimerPage(timeFormatted: timeFormatted));
-                  } else {
-                    Utils.showToast("Please include a valid time", fToast);
-                  }
-                },
-                labelColor: Colors.white,
-                buttonColor: themeBlackLight))
-      ],
+    return Scaffold(
+      backgroundColor: themeBlack,
+      appBar: AppBar(
+        title: Text('Timer',
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.white)),
+        backgroundColor: themeBlack,
+        elevation: 0.0,
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 30),
+          // Enter timer value
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(display != "" ? '${timeFormatted[0]}' : "00",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 60,
+                      fontWeight: FontWeight.w400,
+                      color: themeGrey)),
+              Text('h',
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: themeGrey)),
+              SizedBox(width: 20),
+              Text(display != "" ? '${timeFormatted[1]}' : "00",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 60,
+                      fontWeight: FontWeight.w400,
+                      color: themeGrey)),
+              Text('m',
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: themeGrey)),
+              SizedBox(width: 20),
+              Text(display != "" ? '${timeFormatted[2]}' : "00",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 60,
+                      fontWeight: FontWeight.w400,
+                      color: themeGrey)),
+              Text('s',
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: themeGrey)),
+            ],
+          ),
+          SizedBox(height: 30),
+          // Divider line
+          Divider(
+              height: 10,
+              thickness: 0.75,
+              color: Colors.white.withOpacity(0.3),
+              indent: 30,
+              endIndent: 30),
+          // Keyboard numbers
+          KeyboardNumbers(
+            onKeyboardTap: _onKeyboardTap,
+            textColor: themeGrey,
+            leftIcon: Icon(Icons.backspace, color: themeGrey),
+            leftButtonFn: _leftButton,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+          // Start button
+          AnimatedOpacity(
+              opacity: display != "" ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 300),
+              child: ButtonWidget(
+                  text: 'Start',
+                  onClicked: () {
+                    print(
+                        'Total seconds: ${Utils.convertToSec(timeFormatted)}');
+                    if (Utils.convertToSec(timeFormatted) > 0) {
+                      Get.to(() => TimerPage(timeFormatted: timeFormatted));
+                    } else {
+                      Utils.showToast("Please include a valid time", fToast);
+                    }
+                  },
+                  labelColor: Colors.white,
+                  buttonColor: themeBlackLight))
+        ],
+      ),
     );
   }
 }
