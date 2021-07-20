@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as localNoti;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:timer_app/timerPage.dart';
 import '../main.dart';
 
 class Utils {
@@ -13,12 +12,9 @@ class Utils {
       'alarm_notif',
       'Channel for Alarm notification',
       icon: 'outline_timer_black_24dp',
-      largeIcon:
-          localNoti.DrawableResourceAndroidBitmap('outline_timer_black_24dp'),
       playSound: true,
       priority: localNoti.Priority.high,
       importance: localNoti.Importance.max,
-      timeoutAfter: 5000,
     );
 
     var iOSPlatformChannelSpecifics = localNoti.IOSNotificationDetails(
