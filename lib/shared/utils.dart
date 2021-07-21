@@ -100,7 +100,7 @@ class Utils {
 
     totalTime = int.parse(formattedTime[2]) +
         int.parse(formattedTime[1]) * 60 +
-        int.parse(formattedTime[0]) * 360;
+        int.parse(formattedTime[0]) * 3600;
     return totalTime;
   }
 
@@ -116,6 +116,7 @@ class Utils {
     mins = (seconds.remainder(3600) / 60).truncate().toString();
     secs = (seconds.remainder(3600).remainder(60)).truncate().toString();
     display.addAll([hour, mins, secs]);
+    print(display);
     return display;
   }
 

@@ -142,7 +142,7 @@ class _TimerPageState extends State<TimerPage> {
     }
 
     // Display HH:MM:SS
-    else if (seconds > 3600 && seconds < 86400) {
+    else if (seconds > 3600 && seconds <= 362439) {
       return Center(
         child: Text('$displayHrs:$displayMins:$displaySecs',
             style: GoogleFonts.montserrat(color: Colors.white, fontSize: 30)),
@@ -210,8 +210,8 @@ class _TimerPageState extends State<TimerPage> {
 
       // Execute background timer
       AndroidAlarmManager.oneShot(
-          Duration(seconds: seconds.toInt()), _alarmId, alarmCallback, alarmClock: true,
-          exact: true, wakeup: true);
+          Duration(seconds: seconds.toInt()), _alarmId, alarmCallback,
+          alarmClock: true, exact: true, wakeup: true);
     });
   }
 
