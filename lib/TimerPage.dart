@@ -210,7 +210,7 @@ class _TimerPageState extends State<TimerPage> {
 
       // Execute background timer
       AndroidAlarmManager.oneShot(
-          Duration(seconds: seconds.toInt()), _alarmId, alarmCallback,
+          Duration(seconds: seconds.toInt()), _alarmId, alarmCallback, alarmClock: true,
           exact: true, wakeup: true);
     });
   }

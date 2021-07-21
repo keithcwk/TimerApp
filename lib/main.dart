@@ -1,7 +1,9 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timer_app/shared/constants.dart';
 import 'package:timer_app/timerInput.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -28,6 +30,8 @@ void main() async {
     }
   });
   runApp(MyApp());
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark);
 
   // Alarm Manager Initialization
   await AndroidAlarmManager.initialize();

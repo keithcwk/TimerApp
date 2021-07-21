@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as localNoti;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../main.dart';
 
@@ -8,14 +11,13 @@ class Utils {
   // Schedules a notification when the timer runs out
   static void scheduleAlarm() async {
     var androidPlatformChannelSpecifics = localNoti.AndroidNotificationDetails(
-      'alarm_notif',
-      'alarm_notif',
-      'Channel for Alarm notification',
-      icon: 'outline_timer_black_24dp',
-      playSound: true,
-      priority: localNoti.Priority.high,
-      importance: localNoti.Importance.max,
-    );
+        'alarm_notif', 'alarm_notif', 'Channel for Alarm notification',
+        icon: 'outline_timer_black_24dp',
+        playSound: true,
+        priority: localNoti.Priority.high,
+        importance: localNoti.Importance.max,
+        sound: RawResourceAndroidNotificationSound('bleepreduced'),
+        additionalFlags: Int32List.fromList(<int>[4]));
 
     var iOSPlatformChannelSpecifics = localNoti.IOSNotificationDetails(
         sound: 'bleep.wav',
@@ -28,7 +30,10 @@ class Utils {
         iOS: iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
-        0, 'Time\'s Up!', 'Your timer has run out!', platformChannelSpecifics);
+        0,
+        'Time\'s Up!',
+        'Your timer has run out! Click to stop timer!',
+        platformChannelSpecifics);
   }
 
   // Formats a string of time into [HH:MM:SS]
